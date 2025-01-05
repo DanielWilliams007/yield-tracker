@@ -11,15 +11,25 @@ class AaveProvider extends BaseProvider {
 
   async fetchData() {
     try {
-      // simplified for now
+      // using aave subgraph for now
+      const data = await this.fetchFromSubgraph();
       this.data = {
         protocol: 'Aave V3',
         timestamp: Date.now(),
-        pools: []
+        reserves: data
       };
     } catch (error) {
       console.error('Aave fetch error:', error);
+      this.data = { protocol: 'Aave V3', timestamp: Date.now(), reserves: [] };
     }
+  }
+
+  async fetchFromSubgraph() {
+    // mock data for now
+    return [
+      { symbol: 'USDC', depositAPY: 2.1, borrowAPY: 3.5 },
+      { symbol: 'DAI', depositAPY: 1.8, borrowAPY: 3.2 }
+    ];
   }
 }
 
