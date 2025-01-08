@@ -1,6 +1,7 @@
 const config = require('./config');
 const AaveProvider = require('./providers/aave');
 const CompoundProvider = require('./providers/compound');
+const DataStore = require('./storage/dataStore');
 
 class YieldTracker {
   constructor() {
@@ -8,6 +9,7 @@ class YieldTracker {
       new AaveProvider(config.rpc.ethereum),
       new CompoundProvider()
     ];
+    this.dataStore = new DataStore();
   }
 
   async start() {
@@ -24,7 +26,11 @@ class YieldTracker {
     
     for (const provider of this.providers) {
       await provider.fetchData();
-      console.log(`${provider.name}: ${JSON.stringify(provider.getData())}`);
+      const data = provider.getData();
+      console.log(`${provider.name}: ${JSON.stringify(data)}`);
+      
+      // Save to storage
+      await this.dataStore.save(provider.name, data);
     }
   }
 }
