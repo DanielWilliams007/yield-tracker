@@ -2,6 +2,7 @@ const config = require('./config');
 const AaveProvider = require('./providers/aave');
 const CompoundProvider = require('./providers/compound');
 const DataStore = require('./storage/dataStore');
+const ApiServer = require('./api/server');
 
 class YieldTracker {
   constructor() {
@@ -10,10 +11,15 @@ class YieldTracker {
       new CompoundProvider()
     ];
     this.dataStore = new DataStore();
+    this.apiServer = new ApiServer(3000);
   }
 
   async start() {
     console.log('Starting yield tracker...');
+    
+    // Start API server
+    this.apiServer.start();
+    
     await this.updateAll();
     
     setInterval(() => {
