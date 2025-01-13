@@ -1,5 +1,6 @@
 const BaseProvider = require('./base');
 const axios = require('axios');
+const logger = require('../utils/logger');
 
 class CompoundProvider extends BaseProvider {
   constructor() {
@@ -9,6 +10,7 @@ class CompoundProvider extends BaseProvider {
 
   async fetchData() {
     try {
+      logger.info('Fetching Compound data');
       const response = await axios.get(this.apiUrl);
       const markets = response.data.cToken || [];
       
@@ -21,8 +23,9 @@ class CompoundProvider extends BaseProvider {
           borrowRate: m.borrow_rate?.value || 0
         }))
       };
+      logger.info('Compound data fetched', { markets: markets.length });
     } catch (error) {
-      console.error('Compound fetch error:', error.message);
+      logger.error('Compound fetch error', { error: error.message });
       this.data = { protocol: 'Compound V2', timestamp: Date.now(), markets: [] };
     }
   }

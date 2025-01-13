@@ -1,5 +1,6 @@
 const BaseProvider = require('./base');
 const { ethers } = require('ethers');
+const logger = require('../utils/logger');
 
 class AaveProvider extends BaseProvider {
   constructor(rpcUrl) {
@@ -11,15 +12,16 @@ class AaveProvider extends BaseProvider {
 
   async fetchData() {
     try {
-      // using aave subgraph for now
+      logger.info('Fetching Aave data');
       const data = await this.fetchFromSubgraph();
       this.data = {
         protocol: 'Aave V3',
         timestamp: Date.now(),
         reserves: data
       };
+      logger.info('Aave data fetched successfully', { count: data.length });
     } catch (error) {
-      console.error('Aave fetch error:', error);
+      logger.error('Aave fetch error', { error: error.message });
       this.data = { protocol: 'Aave V3', timestamp: Date.now(), reserves: [] };
     }
   }
