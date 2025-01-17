@@ -1,6 +1,7 @@
 const config = require('./config');
 const AaveProvider = require('./providers/aave');
 const CompoundProvider = require('./providers/compound');
+const CurveProvider = require('./providers/curve');
 const DataStore = require('./storage/dataStore');
 const ApiServer = require('./api/server');
 
@@ -8,7 +9,8 @@ class YieldTracker {
   constructor() {
     this.providers = [
       new AaveProvider(config.rpc.ethereum),
-      new CompoundProvider()
+      new CompoundProvider(),
+      new CurveProvider()
     ];
     this.dataStore = new DataStore();
     this.apiServer = new ApiServer(3000);
