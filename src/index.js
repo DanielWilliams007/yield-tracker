@@ -13,7 +13,7 @@ class YieldTracker {
       new CurveProvider()
     ];
     this.dataStore = new DataStore();
-    this.apiServer = new ApiServer(3000);
+    this.apiServer = new ApiServer(config.api.port);
   }
 
   async start() {
